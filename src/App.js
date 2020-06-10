@@ -39,7 +39,7 @@ const winner = (board) => {
   board.forEach((e, i) => e === "" && indicies.push(i));
 
   if (indicies.length === 0) {
-    return "draw";
+    return "Draw";
   }
 
   return "";
@@ -51,11 +51,27 @@ class App extends Component {
     this.state = {
       board: ["", "", "", "", "", "", "", "", ""],
       editing: false,
+      strategy: "random",
     };
   }
 
-  randomStrategy(indicies) {
-    return indicies[Math.floor(Math.random() * indicies.length)];
+  strategy(indicies) {
+    if (this.state.strategy === "random") {
+      return indicies[Math.floor(Math.random() * indicies.length)];
+    } else if (this.state.strategy === "first") {
+      return indicies[0];
+    } else if (this.state.strategy === "last") {
+      return indicies[indicies.length - 1];
+    }
+  }
+
+  play(index) {
+    const board = this.state.board;
+    const indicies = [];
+    board[index] = "X";
+    this.state.board.forEach((e, i) => e === "" && indicies.push(i));
+    board[this.strategy(indicies)] = "O";
+    this.setState({ board: board });
   }
 
   makeRow = (row) =>
@@ -63,27 +79,17 @@ class App extends Component {
       const message = this.state.board[index];
 
       if (message === "") {
-        return (
-          <SquareInit
-            onClick={() => {
-              const board = this.state.board;
-              const indicies = [];
-              board[index] = "X";
-              this.state.board.forEach((e, i) => e === "" && indicies.push(i));
-              board[this.randomStrategy(indicies)] = "O";
-              this.setState({
-                board: board,
-              });
-            }}
-            index={index}
-          />
-        );
+        return <SquareInit onClick={() => this.play(index)} index={index} />;
       } else if (message === "X") {
         return <Square index={index}>X</Square>;
       } else if (message === "O") {
         return <Square index={index}>O</Square>;
       }
     });
+
+  handleChange = (event) => {
+    this.setState({ strategy: event.target.value });
+  };
 
   render() {
     return (
@@ -100,6 +106,11 @@ class App extends Component {
           </tbody>
         </table>
         <p>winner: {winner(this.state.board)}</p>
+        <select onChange={this.handleChange}>
+          <option value="random">random</option>
+          <option value="first">first</option>
+          <option value="last">last</option>
+        </select>
       </>
     );
   }
