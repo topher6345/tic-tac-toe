@@ -35,6 +35,13 @@ const winner = (board) => {
     return board[6];
   }
 
+  const indicies = [];
+  board.forEach((e, i) => e === "" && indicies.push(i));
+
+  if (indicies.length === 0) {
+    return "draw";
+  }
+
   return "";
 };
 
@@ -43,34 +50,40 @@ class App extends Component {
     super(props);
     this.state = {
       board: ["", "", "", "", "", "", "", "", ""],
+      editing: false,
     };
+  }
+
+  randomStrategy(indicies) {
+    return indicies[Math.floor(Math.random() * indicies.length)];
   }
 
   makeRow = (row) =>
     row.map((index) => {
       const message = this.state.board[index];
+
       if (message === "") {
         return (
           <SquareInit
             onClick={() => {
-              this.setState((state) => {
-                state.board[index] = "X";
-                return {
-                  board: state.board,
-                };
+              const board = this.state.board;
+              const indicies = [];
+              board[index] = "X";
+              this.state.board.forEach((e, i) => e === "" && indicies.push(i));
+              board[this.randomStrategy(indicies)] = "O";
+              this.setState({
+                board: board,
               });
             }}
             index={index}
           />
         );
       } else if (message === "X") {
-        return <SquareX index={index} />;
+        return <Square index={index}>X</Square>;
+      } else if (message === "O") {
+        return <Square index={index}>O</Square>;
       }
     });
-
-  componentDidUpdate() {
-    console.log(`winner: ${winner(this.state.board)}`);
-  }
 
   render() {
     return (
@@ -94,16 +107,17 @@ class App extends Component {
 
 export default App;
 
-function SquareX({ index }) {
+function Square({ index, children }) {
   return (
     <td
       style={{
         backgroundColor: "red",
         maxWidth: "20px",
+        minWidth: "1em",
       }}
       key={index}
     >
-      X
+      {children}
     </td>
   );
 }
@@ -114,6 +128,7 @@ function SquareInit({ onClick, index }) {
       style={{
         backgroundColor: "red",
         maxWidth: "20px",
+        minWidth: "1em",
       }}
       key={index}
       onClick={onClick}
