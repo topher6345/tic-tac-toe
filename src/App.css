@@ -1,6 +1,9 @@
 body {
   background-color: darkslategrey;
   color: #a4a4a4;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  text-transform: uppercase;
 }
 
 table {
@@ -9,12 +12,14 @@ table {
 
 h1 {
   text-align: center;
+  text-transform: uppercase;
 }
 
 td {
   background-color: black;
   max-width: 20px;
   min-width: 1em;
+  min-height: 1.2em;
   font-size: 3em;
 }
 
@@ -54,8 +59,27 @@ div > div {
 
 .win-modal > h2 {
   color: black;
+  font-size: 5em;
 }
 
 .lose-modal {
   background-color: #000000c9;
+}
+
+.lose-modal > h2 {
+  font-size: 5em;
+}
+
+button {
+  border: 1px solid black;
+  font-size: 2em;
+  text-transform: uppercase;
+
+  line-height: 1.6em;
+}
+
+select {
+  font-size: 1.3em;
+  border: 1px solid black;
+  text-transform: uppercase;
 }

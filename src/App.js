@@ -85,7 +85,7 @@ class App extends Component {
         {winner(this.state.board) === "Draw" && (
           <DrawModal onClick={this.reset} />
         )}
-        <h1>TicTacToe</h1>
+        <h1>Tic • Tac • Toe</h1>
         <table>
           <tbody>
             {[
@@ -102,13 +102,13 @@ class App extends Component {
             <button onClick={this.reset}>Reset</button>
           </p>
           <p>
-            <label for="strategy">Strategy:</label>
+            <label for="strategy">Strategy</label>
           </p>
           <p>
             <select name="strategy" onChange={this.updateStrategy}>
-              <option value="random">random</option>
-              <option value="first">first</option>
-              <option value="last">last</option>
+              <option value="random">RANDOM</option>
+              <option value="first">FIRST</option>
+              <option value="last">LAST</option>
             </select>
           </p>
         </div>
