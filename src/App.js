@@ -1,99 +1,81 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 
 const winner = (board) => {
-  if (board[0] === board[1] && board[1] === board[2] && board[2] !== "") {
+  if (board[0] === board[1] && board[1] === board[2] && board[2] !== "")
     return board[0];
-  }
-
-  if (board[3] === board[4] && board[4] === board[5] && board[5] !== "") {
+  if (board[3] === board[4] && board[4] === board[5] && board[5] !== "")
     return board[3];
-  }
-
-  if (board[6] === board[7] && board[7] === board[8] && board[8] !== "") {
+  if (board[6] === board[7] && board[7] === board[8] && board[8] !== "")
     return board[6];
-  }
-
-  if (board[0] === board[3] && board[3] === board[6] && board[6] !== "") {
+  if (board[0] === board[3] && board[3] === board[6] && board[6] !== "")
     return board[0];
-  }
-
-  if (board[1] === board[4] && board[4] === board[7] && board[7] !== "") {
+  if (board[1] === board[4] && board[4] === board[7] && board[7] !== "")
     return board[1];
-  }
-
-  if (board[2] === board[5] && board[5] === board[8] && board[8] !== "") {
+  if (board[2] === board[5] && board[5] === board[8] && board[8] !== "")
     return board[2];
-  }
-
-  if (board[0] === board[4] && board[4] === board[8] && board[8] !== "") {
+  if (board[0] === board[4] && board[4] === board[8] && board[8] !== "")
     return board[0];
-  }
-
-  if (board[6] === board[4] && board[4] === board[2] && board[2] !== "") {
+  if (board[6] === board[4] && board[4] === board[2] && board[2] !== "")
     return board[6];
-  }
 
-  const indicies = [];
-  board.forEach((e, i) => e === "" && indicies.push(i));
+  const length = board.reduce((m, e) => (e === "" ? m + 1 : m), 0);
+  if (length === 0) return "Draw";
 
-  if (indicies.length === 0) {
-    return "Draw";
-  }
-
-  return "";
+  return false;
 };
 
+const INIT_BOARD = ["", "", "", "", "", "", "", "", ""];
+const X = "❌";
+const O = "⭕️";
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      board: ["", "", "", "", "", "", "", "", ""],
-      editing: false,
+      board: Array.from(INIT_BOARD),
+      over: false,
       strategy: "random",
     };
   }
 
   strategy(indicies) {
-    if (this.state.strategy === "random") {
+    if (this.state.strategy === "random")
       return indicies[Math.floor(Math.random() * indicies.length)];
-    } else if (this.state.strategy === "first") {
-      return indicies[0];
-    } else if (this.state.strategy === "last") {
-      return indicies[indicies.length - 1];
-    }
+    if (this.state.strategy === "first") return indicies[0];
+    if (this.state.strategy === "last") return indicies[indicies.length - 1];
   }
 
-  play(index) {
-    const board = this.state.board;
+  play = (index) => () => {
+    if (this.state.over) return;
+
+    const board = Array.from(this.state.board);
     const indicies = [];
-    board[index] = "X";
-    this.state.board.forEach((e, i) => e === "" && indicies.push(i));
-    board[this.strategy(indicies)] = "O";
-    this.setState({ board: board });
-  }
+    board[index] = X;
+
+    if (winner(board)) return this.setState({ board, over: true });
+
+    board.forEach((e, i) => e === "" && indicies.push(i));
+    board[this.strategy(indicies)] = O;
+    this.setState({ board, over: winner(board) });
+  };
 
   makeRow = (row) =>
     row.map((index) => {
       const message = this.state.board[index];
-
-      if (message === "") {
-        return <SquareInit onClick={() => this.play(index)} index={index} />;
-      } else if (message === "X") {
-        return <Square index={index}>X</Square>;
-      } else if (message === "O") {
-        return <Square index={index}>O</Square>;
-      }
+      if (message === "")
+        return <SquareInit onClick={this.play(index)} index={index} />;
+      if (message === X) return <Square index={index}>{X}</Square>;
+      if (message === O) return <Square index={index}>{O}</Square>;
     });
 
-  handleChange = (event) => {
-    this.setState({ strategy: event.target.value });
-  };
+  updateStrategy = (event) => this.setState({ strategy: event.target.value });
+
+  reset = () => this.setState({ board: Array.from(INIT_BOARD) });
 
   render() {
     return (
       <>
+        <h1>TicTacToe</h1>
         <table>
           <tbody>
             {[
@@ -106,7 +88,9 @@ class App extends Component {
           </tbody>
         </table>
         <p>winner: {winner(this.state.board)}</p>
-        <select onChange={this.handleChange}>
+        <button onClick={this.reset}>Reset</button>
+        <label>Strategy:</label>
+        <select onChange={this.updateStrategy}>
           <option value="random">random</option>
           <option value="first">first</option>
           <option value="last">last</option>
@@ -118,33 +102,10 @@ class App extends Component {
 
 export default App;
 
-function Square({ index, children }) {
-  return (
-    <td
-      style={{
-        backgroundColor: "red",
-        maxWidth: "20px",
-        minWidth: "1em",
-      }}
-      key={index}
-    >
-      {children}
-    </td>
-  );
-}
+const Square = ({ index, children }) => <td key={index}>{children}</td>;
 
-function SquareInit({ onClick, index }) {
-  return (
-    <td
-      style={{
-        backgroundColor: "red",
-        maxWidth: "20px",
-        minWidth: "1em",
-      }}
-      key={index}
-      onClick={onClick}
-    >
-      {"_"}
-    </td>
-  );
-}
+const SquareInit = ({ onClick, index }) => (
+  <td key={index} onClick={onClick}>
+    {"_"}
+  </td>
+);
