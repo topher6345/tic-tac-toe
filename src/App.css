@@ -1,5 +1,6 @@
 body {
   background-color: darkslategrey;
+  color: #a4a4a4;
 }
 
 table {
@@ -14,4 +15,47 @@ td {
   background-color: black;
   max-width: 20px;
   min-width: 1em;
+  font-size: 3em;
+}
+
+td:hover {
+  cursor: pointer;
+}
+
+div > div {
+  margin: 0 auto;
+  max-width: 400px;
+  text-align: center;
+}
+
+.win-modal,
+.lose-modal {
+  top: 0;
+  left: 0;
+  max-width: 100%;
+  min-height: 100%;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  animation: fadein 1s;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.win-modal {
+  background-color: #75ecafc2;
+}
+
+.win-modal > h2 {
+  color: black;
+}
+
+.lose-modal {
+  background-color: #000000c9;
 }

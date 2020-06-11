@@ -35,6 +35,7 @@ class App extends Component {
       board: Array.from(INIT_BOARD),
       over: false,
       strategy: "random",
+      winner: false,
     };
   }
 
@@ -63,18 +64,27 @@ class App extends Component {
     row.map((index) => {
       const message = this.state.board[index];
       if (message === "")
-        return <SquareInit onClick={this.play(index)} index={index} />;
-      if (message === X) return <Square index={index}>{X}</Square>;
-      if (message === O) return <Square index={index}>{O}</Square>;
+        return (
+          <td onClick={this.play(index)} index={index}>
+            &nbsp;
+          </td>
+        );
+      if (message === X) return <td key={index}>{X}</td>;
+      if (message === O) return <td key={index}>{O}</td>;
     });
 
   updateStrategy = (event) => this.setState({ strategy: event.target.value });
 
-  reset = () => this.setState({ board: Array.from(INIT_BOARD) });
+  reset = () => this.setState({ board: Array.from(INIT_BOARD), over: false });
 
   render() {
     return (
       <>
+        {winner(this.state.board) === X && <WinModal onClick={this.reset} />}
+        {winner(this.state.board) === O && <LoseModal onClick={this.reset} />}
+        {winner(this.state.board) === "Draw" && (
+          <DrawModal onClick={this.reset} />
+        )}
         <h1>TicTacToe</h1>
         <table>
           <tbody>
@@ -87,14 +97,21 @@ class App extends Component {
             ))}
           </tbody>
         </table>
-        <p>winner: {winner(this.state.board)}</p>
-        <button onClick={this.reset}>Reset</button>
-        <label>Strategy:</label>
-        <select onChange={this.updateStrategy}>
-          <option value="random">random</option>
-          <option value="first">first</option>
-          <option value="last">last</option>
-        </select>
+        <div>
+          <p>
+            <button onClick={this.reset}>Reset</button>
+          </p>
+          <p>
+            <label for="strategy">Strategy:</label>
+          </p>
+          <p>
+            <select name="strategy" onChange={this.updateStrategy}>
+              <option value="random">random</option>
+              <option value="first">first</option>
+              <option value="last">last</option>
+            </select>
+          </p>
+        </div>
       </>
     );
   }
@@ -102,10 +119,22 @@ class App extends Component {
 
 export default App;
 
-const Square = ({ index, children }) => <td key={index}>{children}</td>;
+const DrawModal = (props) => (
+  <div class="lose-modal">
+    <h2>😭You Lost!😭</h2>
+    <button {...props}>Play Again</button>
+  </div>
+);
+const LoseModal = (props) => (
+  <div class="lose-modal">
+    <h2>😭You Lost!😭</h2>
+    <button {...props}>Play Again</button>
+  </div>
+);
 
-const SquareInit = ({ onClick, index }) => (
-  <td key={index} onClick={onClick}>
-    {"_"}
-  </td>
+const WinModal = (props) => (
+  <div class="win-modal">
+    <h2>🏆You Won!🏆</h2>
+    <button {...props}>Play Again</button>
+  </div>
 );
