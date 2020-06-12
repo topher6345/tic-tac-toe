@@ -34,7 +34,8 @@ div > div {
 }
 
 .win-modal,
-.lose-modal {
+.lose-modal,
+.draw-modal {
   top: 0;
   left: 0;
   max-width: 100%;
@@ -66,7 +67,19 @@ div > div {
   background-color: #000000c9;
 }
 
+.draw-modal {
+  background-color: #000000c9;
+}
+
 .lose-modal > h2 {
+  font-size: 5em;
+}
+
+.draw-modal > h2 {
+  font-size: 5em;
+}
+
+.draw-modal > h2 {
   font-size: 5em;
 }
 
