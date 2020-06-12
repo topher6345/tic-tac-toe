@@ -52,6 +52,11 @@ const detectWinner = (array) => {
 const blockStrategy = (board) => {
   if (count(board, X) === 1 && board[4] === Empty) return 4;
 
+  // Makes O's moves UNBEATABLE
+  // if X plays the center square as first move O should never play a corner
+  if (count(board, X) === 1 && board[4] === X)
+    return [1, 3, 5, 7][Math.floor(Math.random() * 4)];
+  
   const detect = (player, a, b, empty) =>
     board[a] === player && board[b] === board[a] && board[empty] === Empty;
 
