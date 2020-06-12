@@ -5,6 +5,18 @@ const X = "❌";
 const O = "⭕️";
 const Empty = "";
 
+const BOARD = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+];
+
+const transpose = ([a, b, c]) => [
+  [a[0], b[0], c[0]],
+  [a[1], b[1], c[1]],
+  [a[2], b[2], c[2]],
+];
+
 const indexsOf = (array, target) =>
   array.reduce((m, e, i) => (e === target ? m.concat(i) : m), []);
 
@@ -15,12 +27,15 @@ const detectWinner = (array) => {
   const findWinner = (a, b, c) =>
     array[a] === array[b] && array[b] === array[c] && array[c] !== Empty;
 
-  if (findWinner(0, 1, 2)) return array[0];
-  if (findWinner(3, 4, 5)) return array[3];
-  if (findWinner(6, 7, 8)) return array[6];
-  if (findWinner(0, 3, 6)) return array[0];
-  if (findWinner(1, 4, 7)) return array[1];
-  if (findWinner(2, 5, 8)) return array[2];
+  for (let i = 0; i < 3; i++) {
+    if (findWinner(...BOARD[i])) return BOARD[i][0];
+  }
+
+  const transposedBoard = transpose(BOARD);
+  for (let i = 0; i < 3; i++) {
+    if (findWinner(...transposedBoard[i])) return transposedBoard[i][0];
+  }
+
   if (findWinner(0, 4, 8)) return array[0];
   if (findWinner(6, 4, 2)) return array[6];
   if (count(array, "") === 0) return "Draw";
@@ -177,11 +192,7 @@ const App = () => {
       <h1>Tic • Tac • Toe</h1>
       <table>
         <tbody>
-          {[
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-          ].map((row) => (
+          {BOARD.map((row) => (
             <tr>{row.map(makeTd)}</tr>
           ))}
         </tbody>
