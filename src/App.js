@@ -28,12 +28,12 @@ const detectWinner = (array) => {
     array[a] === array[b] && array[b] === array[c] && array[c] !== Empty;
 
   for (let i = 0; i < 3; i++) {
-    if (findWinner(...BOARD[i])) return BOARD[i][0];
+    if (findWinner(...BOARD[i])) return array[i][0];
   }
 
   const transposedBoard = transpose(BOARD);
   for (let i = 0; i < 3; i++) {
-    if (findWinner(...transposedBoard[i])) return transposedBoard[i][0];
+    if (findWinner(...transposedBoard[i])) return array[transposedBoard[i][0]];
   }
 
   if (findWinner(0, 4, 8)) return array[0];
