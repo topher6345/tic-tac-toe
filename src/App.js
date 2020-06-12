@@ -1,139 +1,143 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import "./App.css";
 
-const winner = (board) => {
-  if (board[0] === board[1] && board[1] === board[2] && board[2] !== "")
-    return board[0];
-  if (board[3] === board[4] && board[4] === board[5] && board[5] !== "")
-    return board[3];
-  if (board[6] === board[7] && board[7] === board[8] && board[8] !== "")
-    return board[6];
-  if (board[0] === board[3] && board[3] === board[6] && board[6] !== "")
-    return board[0];
-  if (board[1] === board[4] && board[4] === board[7] && board[7] !== "")
-    return board[1];
-  if (board[2] === board[5] && board[5] === board[8] && board[8] !== "")
-    return board[2];
-  if (board[0] === board[4] && board[4] === board[8] && board[8] !== "")
-    return board[0];
-  if (board[6] === board[4] && board[4] === board[2] && board[2] !== "")
-    return board[6];
+const indexsOf = (array, target) =>
+  array.reduce((m, e, i) => (e === target ? m.concat(i) : m), []);
 
-  const length = board.reduce((m, e) => (e === "" ? m + 1 : m), 0);
-  if (length === 0) return "Draw";
+const count = (array, target) =>
+  array.reduce((m, e) => (e === target ? m + 1 : m), 0);
+
+const detectWinner = (array) => {
+  if (array[0] === array[1] && array[1] === array[2] && array[2] !== "")
+    return array[0];
+  if (array[3] === array[4] && array[4] === array[5] && array[5] !== "")
+    return array[3];
+  if (array[6] === array[7] && array[7] === array[8] && array[8] !== "")
+    return array[6];
+  if (array[0] === array[3] && array[3] === array[6] && array[6] !== "")
+    return array[0];
+  if (array[1] === array[4] && array[4] === array[7] && array[7] !== "")
+    return array[1];
+  if (array[2] === array[5] && array[5] === array[8] && array[8] !== "")
+    return array[2];
+  if (array[0] === array[4] && array[4] === array[8] && array[8] !== "")
+    return array[0];
+  if (array[6] === array[4] && array[4] === array[2] && array[2] !== "")
+    return array[6];
+
+  if (count(array, "") === 0) return "Draw";
 
   return false;
 };
 
-const INIT_BOARD = ["", "", "", "", "", "", "", "", ""];
+const playStrategy = (strategy, board) => {
+  const candidates = indexsOf(board, "");
+  const length = candidates.length;
+
+  if (strategy === "random") {
+    return candidates[Math.floor(Math.random() * length)];
+  } else if (strategy === "first") {
+    return candidates[0];
+  } else if (strategy === "last") {
+    return candidates[length - 1];
+  }
+};
+
+const initalBoard = ["", "", "", "", "", "", "", "", ""];
+const initalState = {
+  board: Array.from(initalBoard),
+  over: false,
+  strategy: "random",
+};
 const X = "❌";
 const O = "⭕️";
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      board: Array.from(INIT_BOARD),
-      over: false,
-      strategy: "random",
-      winner: false,
-    };
-  }
 
-  strategy(indicies) {
-    if (this.state.strategy === "random")
-      return indicies[Math.floor(Math.random() * indicies.length)];
-    if (this.state.strategy === "first") return indicies[0];
-    if (this.state.strategy === "last") return indicies[indicies.length - 1];
-  }
+const App = () => {
+  const [state, setState] = useState(initalState);
 
-  play = (index) => () => {
-    if (this.state.over) return;
-
-    const board = Array.from(this.state.board);
-    const indicies = [];
-    board[index] = X;
-
-    if (winner(board)) return this.setState({ board, over: true });
-
-    board.forEach((e, i) => e === "" && indicies.push(i));
-    board[this.strategy(indicies)] = O;
-    this.setState({ board, over: winner(board) });
+  const onPlay = (index) => () => {
+    setState((oldState) => {
+      if (oldState.over) return oldState;
+      const board = Array.from(oldState.board);
+      board[index] = X;
+      const winner = detectWinner(board);
+      if (!winner) board[playStrategy(state.strategy, board)] = O;
+      return { ...oldState, board, over: winner };
+    });
   };
 
-  makeRow = (row) =>
-    row.map((index) => {
-      const message = this.state.board[index];
-      if (message === "")
-        return (
-          <td onClick={this.play(index)} index={index}>
-            &nbsp;
-          </td>
-        );
-      if (message === X) return <td key={index}>{X}</td>;
-      if (message === O) return <td key={index}>{O}</td>;
-    });
+  const makeTd = (index) => {
+    const message = state.board[index];
+    if (message === "")
+      return (
+        <td onClick={onPlay(index)} index={index}>
+          &nbsp;
+        </td>
+      );
+    if (message === X) return <td key={index}>{X}</td>;
+    if (message === O) return <td key={index}>{O}</td>;
+  };
 
-  updateStrategy = (event) => this.setState({ strategy: event.target.value });
+  const updateStrategy = (event) => setState({ strategy: event.target.value });
 
-  reset = () => this.setState({ board: Array.from(INIT_BOARD), over: false });
+  const resetGame = () =>
+    setState((oldState) => ({ ...initalState, strategy: oldState.strategy }));
 
-  render() {
-    return (
-      <>
-        {winner(this.state.board) === X && <WinModal onClick={this.reset} />}
-        {winner(this.state.board) === O && <LoseModal onClick={this.reset} />}
-        {winner(this.state.board) === "Draw" && (
-          <DrawModal onClick={this.reset} />
-        )}
-        <h1>Tic • Tac • Toe</h1>
-        <table>
-          <tbody>
-            {[
-              [0, 1, 2],
-              [3, 4, 5],
-              [6, 7, 8],
-            ].map((row) => (
-              <tr>{this.makeRow(row)}</tr>
-            ))}
-          </tbody>
-        </table>
-        <div>
-          <p>
-            <button onClick={this.reset}>Reset</button>
-          </p>
-          <p>
-            <label for="strategy">Strategy</label>
-          </p>
-          <p>
-            <select name="strategy" onChange={this.updateStrategy}>
-              <option value="random">RANDOM</option>
-              <option value="first">FIRST</option>
-              <option value="last">LAST</option>
-            </select>
-          </p>
-        </div>
-      </>
-    );
-  }
-}
+  const winner = detectWinner(state.board);
+
+  return (
+    <>
+      {winner === X && <WinModal onClick={resetGame} />}
+      {winner === O && <LoseModal onClick={resetGame} />}
+      {winner === "Draw" && <DrawModal onClick={resetGame} />}
+      <h1>Tic • Tac • Toe</h1>
+      <table>
+        <tbody>
+          {[
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+          ].map((row) => (
+            <tr>{row.map(makeTd)}</tr>
+          ))}
+        </tbody>
+      </table>
+      <div>
+        <p>
+          <button onClick={resetGame}>Reset</button>
+        </p>
+        <p>
+          <label htmlFor="strategy">Strategy</label>
+        </p>
+        <p>
+          <select name="strategy" onChange={updateStrategy}>
+            <option value="random">RANDOM</option>
+            <option value="first">FIRST</option>
+            <option value="last">LAST</option>
+          </select>
+        </p>
+      </div>
+    </>
+  );
+};
 
 export default App;
 
 const DrawModal = (props) => (
-  <div class="lose-modal">
+  <div className="lose-modal">
     <h2>😭You Lost!😭</h2>
     <button {...props}>Play Again</button>
   </div>
 );
 const LoseModal = (props) => (
-  <div class="lose-modal">
+  <div className="lose-modal">
     <h2>😭You Lost!😭</h2>
     <button {...props}>Play Again</button>
   </div>
 );
 
 const WinModal = (props) => (
-  <div class="win-modal">
+  <div className="win-modal">
     <h2>🏆You Won!🏆</h2>
     <button {...props}>Play Again</button>
   </div>
