@@ -144,48 +144,43 @@ const initalBoard = [
   Empty,
   Empty,
 ];
-const initalState = {
-  board: Array.from(initalBoard),
-  over: false,
-  strategy: "block",
-};
 
 const App = () => {
-  const [state, setState] = useState(initalState);
+  const [board, setBoard] = useState(Array.from(initalBoard));
+  const [over, setOver] = useState(false);
+  const [strategy, setStrategy] = useState("block");
+  const winner = detectWinner(board);
 
   const onPlay = (index) => () => {
-    setState((oldState) => {
-      if (oldState.over) return oldState;
-      const board = Array.from(oldState.board);
-      board[index] = X;
-      const winner = detectWinner(board);
-      const strategy = playStrategy(state.strategy, board);
-      if (!winner) board[strategy] = O;
-      return { ...oldState, board, over: winner };
-    });
+    if (over) return;
+    const newBoard = Array.from(board);
+    newBoard[index] = X;
+    const winner = detectWinner(newBoard);
+    setOver(winner);
+    if (!winner) newBoard[playStrategy(strategy, newBoard)] = O;
+    setBoard(newBoard);
   };
 
   const makeTd = (index) => {
-    const message = state.board[index];
+    const message = board[index];
     if (message === "")
       return (
         <td onClick={onPlay(index)} key={index}>
-          &nbsp;
+          {" "}
+          &nbsp;{" "}
         </td>
       );
     if (message === X) return <td key={index}>{X}</td>;
     if (message === O) return <td key={index}>{O}</td>;
   };
 
-  const updateStrategy = ({ target }) => {
-    const { value: strategy } = target;
-    setState((oldState) => ({ ...oldState, strategy }));
+  const updateStrategy = (e) => setStrategy(e.target.value);
+
+  const resetGame = () => {
+    setStrategy(strategy);
+    setBoard(Array.from(initalBoard));
+    setOver(false);
   };
-
-  const resetGame = () =>
-    setState((oldState) => ({ ...initalState, strategy: oldState.strategy }));
-
-  const winner = detectWinner(state.board);
 
   return (
     <>
@@ -208,7 +203,7 @@ const App = () => {
           <label htmlFor="strategy">Strategy</label>
         </p>
         <p>
-          <select name="strategy" onChange={(e) => updateStrategy(e)}>
+          <select name="strategy" onChange={updateStrategy}>
             <option value="block">Block</option>
             <option value="random">RANDOM</option>
             <option value="first">FIRST</option>
