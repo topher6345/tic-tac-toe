@@ -52,10 +52,6 @@ const detectWinner = (array) => {
 const blockStrategy = (board) => {
   if (count(board, X) === 1 && board[4] === Empty) return 4;
 
-  // if X plays the center square as first move O should never play a corner
-  //   if (count(board, X) === 1 && board[4] === X)
-  //     return [1, 3, 5, 7][Math.floor(Math.random() * 4)];
-
   const detect = (player, a, b, empty) =>
     board[a] === player && board[b] === board[a] && board[empty] === Empty;
 
@@ -161,6 +157,14 @@ const App = () => {
     setBoard(newBoard);
   };
 
+  const updateStrategy = (e) => setStrategy(e.target.value);
+
+  const resetGame = () => {
+    setStrategy(strategy);
+    setBoard(Array.from(initalBoard));
+    setOver(false);
+  };
+
   const makeTd = (index) => {
     const message = board[index];
     if (message === "")
@@ -174,13 +178,7 @@ const App = () => {
     if (message === O) return <td key={index}>{O}</td>;
   };
 
-  const updateStrategy = (e) => setStrategy(e.target.value);
-
-  const resetGame = () => {
-    setStrategy(strategy);
-    setBoard(Array.from(initalBoard));
-    setOver(false);
-  };
+  const rows = () => BOARD.map((row) => <tr>{row.map(makeTd)}</tr>);
 
   return (
     <>
@@ -189,11 +187,7 @@ const App = () => {
       {winner === "Draw" && <DrawModal onClick={resetGame} />}
       <h1>Tic • Tac • Toe</h1>
       <table>
-        <tbody>
-          {BOARD.map((row) => (
-            <tr>{row.map(makeTd)}</tr>
-          ))}
-        </tbody>
+        <tbody>{rows()}</tbody>
       </table>
       <div>
         <p>
