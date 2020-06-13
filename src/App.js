@@ -55,7 +55,7 @@ const blockStrategy = (board) => {
   // if X plays the center square as first move O should never play a corner
   //   if (count(board, X) === 1 && board[4] === X)
   //     return [1, 3, 5, 7][Math.floor(Math.random() * 4)];
-  
+
   const detect = (player, a, b, empty) =>
     board[a] === player && board[b] === board[a] && board[empty] === Empty;
 
@@ -109,7 +109,7 @@ const blockStrategy = (board) => {
   if (detect(X, 2, 5, 8)) return 8;
   if (detect(X, 6, 7, 8)) return 8;
 
-  return [];
+  return false;
 };
 
 // String -> Array -> Number
@@ -125,9 +125,8 @@ const playStrategy = (strategy, board) => {
     return candidates[length - 1];
   } else if (strategy === "block") {
     const index = blockStrategy(board);
-    const candidate = candidates[Math.floor(Math.random() * length)];
-    if (JSON.stringify(index) === "[]") {
-      return candidate;
+    if (index === false) {
+      return candidates[Math.floor(Math.random() * length)];
     } else {
       return index;
     }
@@ -170,7 +169,7 @@ const App = () => {
     const message = state.board[index];
     if (message === "")
       return (
-        <td onClick={onPlay(index)} index={index}>
+        <td onClick={onPlay(index)} key={index}>
           &nbsp;
         </td>
       );
