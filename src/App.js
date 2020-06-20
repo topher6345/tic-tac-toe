@@ -145,6 +145,7 @@ const App = () => {
   const [board, setBoard] = useState(Array.from(initalBoard));
   const [over, setOver] = useState(false);
   const [strategy, setStrategy] = useState("block");
+  const [history, setHistory] = useState([]);
   const winner = detectWinner(board);
 
   const onPlay = (index) => () => {
@@ -160,6 +161,7 @@ const App = () => {
   const updateStrategy = (e) => setStrategy(e.target.value);
 
   const resetGame = () => {
+    if (winner) setHistory((oldHistory) => [winner, ...oldHistory]);
     setStrategy(strategy);
     setBoard(Array.from(initalBoard));
     setOver(false);
@@ -178,7 +180,8 @@ const App = () => {
     if (message === O) return <td key={index}>{O}</td>;
   };
 
-  const rows = () => BOARD.map((row) => <tr>{row.map(makeTd)}</tr>);
+  const rows = () =>
+    BOARD.map((row, index) => <tr key={index}>{row.map(makeTd)}</tr>);
 
   return (
     <>
@@ -204,12 +207,31 @@ const App = () => {
             <option value="last">LAST</option>
           </select>
         </p>
+        <p>History</p>
+        <div>
+          <ol reversed>
+            <HistoryList history={history} />
+          </ol>
+        </div>
       </div>
     </>
   );
 };
 
 export default App;
+
+const HistoryList = (props) =>
+  props.history.map((winner, index) => (
+    <li key={index + winner}>
+      {
+        {
+          [X]: "🏆You Won!🏆",
+          [O]: "😭You Lost!😭",
+          Draw: "🤷‍♀️Draw🤷‍♀️",
+        }[winner]
+      }
+    </li>
+  ));
 
 const DrawModal = (props) => (
   <div className="draw-modal">

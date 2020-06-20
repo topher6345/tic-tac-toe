@@ -96,3 +96,11 @@ select {
   border: 1px solid black;
   text-transform: uppercase;
 }
+
+li {
+  text-align: left;
+}
+
+div > div {
+  max-width: 200px;
+}
