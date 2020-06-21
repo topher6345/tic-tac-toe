@@ -147,6 +147,17 @@ const initalBoard = [
   Empty,
 ];
 
+const winPercentage = (history) =>
+  (
+    (history.reduce(
+      (previousValue, { winner }) =>
+        winner === X ? previousValue + 1 : previousValue,
+      0
+    ) /
+      history.length) *
+    100
+  ).toFixed(0);
+
 const App = () => {
   const [board, setBoard] = useState(Array.from(initalBoard));
   const [over, setOver] = useState(false);
@@ -167,14 +178,22 @@ const App = () => {
   const updateStrategy = (e) => setStrategy(e.target.value);
 
   const resetGame = () => {
-    if (winner)
-      setHistory((oldHistory) => [
-        { winner, strategy, timestamp: new Date(Date.now()) },
-        ...oldHistory,
-      ]);
     setStrategy(strategy);
     setBoard(Array.from(initalBoard));
     setOver(false);
+  };
+
+  const newGame = () => {
+    setHistory((oldHistory) => [
+      {
+        winner,
+        strategy,
+        timestamp: new Date(Date.now()),
+        winPercentage: winPercentage([{ winner }, ...oldHistory]),
+      },
+      ...oldHistory,
+    ]);
+    resetGame();
   };
 
   const makeTd = (index) => {
@@ -195,9 +214,9 @@ const App = () => {
 
   return (
     <>
-      {winner === X && <WinModal onClick={resetGame} />}
-      {winner === O && <LoseModal onClick={resetGame} />}
-      {winner === "Draw" && <DrawModal onClick={resetGame} />}
+      {winner === X && <WinModal onClick={newGame} />}
+      {winner === O && <LoseModal onClick={newGame} />}
+      {winner === "Draw" && <DrawModal onClick={newGame} />}
       <h1>Tic • Tac • Toe</h1>
       <table>
         <tbody>{rows()}</tbody>
@@ -230,10 +249,11 @@ const App = () => {
 
 export default App;
 
-const HistoryList = (props) =>
-  props.history.map(({ winner, strategy, timestamp }, index) => (
+const HistoryList = ({ history }) =>
+  history.map(({ winner, strategy, timestamp, winPercentage }, index) => (
     <li key={index + winner}>
-      {FLASH[winner]} strategy: {strategy} {timestamp.toLocaleTimeString()}
+      {FLASH[winner]} strategy: {strategy} {timestamp.toLocaleTimeString()} win
+      percentage: {winPercentage}%
     </li>
   ));
 
