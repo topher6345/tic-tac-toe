@@ -168,7 +168,10 @@ const App = () => {
 
   const resetGame = () => {
     if (winner)
-      setHistory((oldHistory) => [{ winner, strategy }, ...oldHistory]);
+      setHistory((oldHistory) => [
+        { winner, strategy, timestamp: new Date(Date.now()) },
+        ...oldHistory,
+      ]);
     setStrategy(strategy);
     setBoard(Array.from(initalBoard));
     setOver(false);
@@ -228,9 +231,9 @@ const App = () => {
 export default App;
 
 const HistoryList = (props) =>
-  props.history.map(({ winner, strategy }, index) => (
+  props.history.map(({ winner, strategy, timestamp }, index) => (
     <li key={index + winner}>
-      {FLASH[winner]} strategy: {strategy}
+      {FLASH[winner]} strategy: {strategy} {timestamp.toLocaleTimeString()}
     </li>
   ));
 
