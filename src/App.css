@@ -25,6 +25,7 @@ td {
 
 td:hover {
   cursor: pointer;
+  background-color: darkgray;
 }
 
 div > div {
@@ -91,6 +92,11 @@ button {
   line-height: 1.6em;
 }
 
+button:hover {
+  background-color: darkgray;
+  cursor: pointer;
+}
+
 select {
   font-size: 1.3em;
   border: 1px solid black;
@@ -99,8 +105,4 @@ select {
 
 li {
   text-align: left;
-}
-
-div > div {
-  max-width: 200px;
 }

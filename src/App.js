@@ -5,6 +5,12 @@ const X = "❌";
 const O = "⭕️";
 const Empty = "";
 
+const FLASH = {
+  [X]: "🏆You Won!🏆",
+  [O]: "😭You Lost!😭",
+  Draw: "🤷‍♀️Draw🤷‍♀️",
+};
+
 const BOARD = [
   [0, 1, 2],
   [3, 4, 5],
@@ -161,7 +167,8 @@ const App = () => {
   const updateStrategy = (e) => setStrategy(e.target.value);
 
   const resetGame = () => {
-    if (winner) setHistory((oldHistory) => [winner, ...oldHistory]);
+    if (winner)
+      setHistory((oldHistory) => [{ winner, strategy }, ...oldHistory]);
     setStrategy(strategy);
     setBoard(Array.from(initalBoard));
     setOver(false);
@@ -221,34 +228,28 @@ const App = () => {
 export default App;
 
 const HistoryList = (props) =>
-  props.history.map((winner, index) => (
+  props.history.map(({ winner, strategy }, index) => (
     <li key={index + winner}>
-      {
-        {
-          [X]: "🏆You Won!🏆",
-          [O]: "😭You Lost!😭",
-          Draw: "🤷‍♀️Draw🤷‍♀️",
-        }[winner]
-      }
+      {FLASH[winner]} strategy: {strategy}
     </li>
   ));
 
 const DrawModal = (props) => (
   <div className="draw-modal">
-    <h2>🤷‍♀️DRAW🤷‍♀️</h2>
+    <h2>{FLASH["Draw"]}</h2>
     <button {...props}>Play Again</button>
   </div>
 );
 const LoseModal = (props) => (
   <div className="lose-modal">
-    <h2>😭You Lost!😭</h2>
+    <h2>{FLASH[O]}</h2>
     <button {...props}>Play Again</button>
   </div>
 );
 
 const WinModal = (props) => (
   <div className="win-modal">
-    <h2>🏆You Won!🏆</h2>
+    <h2>{FLASH[X]}</h2>
     <button {...props}>Play Again</button>
   </div>
 );
