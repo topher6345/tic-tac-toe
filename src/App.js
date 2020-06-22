@@ -198,15 +198,15 @@ const App = () => {
 
   const makeTd = (index) => {
     const message = board[index];
-    if (message === "")
-      return (
-        <td onClick={onPlay(index)} key={index}>
-          {" "}
-          &nbsp;{" "}
-        </td>
-      );
     if (message === X) return <td key={index}>{X}</td>;
     if (message === O) return <td key={index}>{O}</td>;
+
+    return (
+      <td onClick={onPlay(index)} key={index}>
+        {" "}
+        &nbsp;{" "}
+      </td>
+    );
   };
 
   const rows = () =>
