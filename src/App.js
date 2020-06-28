@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 
+const onPlaySound = document.getElementById("onPlaySound");
 const X = "❌";
 const O = "⭕️";
 const Empty = "";
@@ -166,6 +167,7 @@ const App = () => {
 
   const onPlay = (index) => () => {
     if (over) return;
+    onPlaySound.play();
     const newBoard = Array.from(board);
     newBoard[index] = X;
     const winner = detectWinner(newBoard);
