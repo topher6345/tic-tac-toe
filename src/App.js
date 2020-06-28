@@ -8,7 +8,7 @@ const Empty = "";
 const FLASH = {
   [X]: "🏆You Won!🏆",
   [O]: "😭You Lost!😭",
-  Draw: "🤷‍♀️Draw🤷‍♀️",
+  Draw: "🤷‍♀️   Draw   🤷‍♀️",
 };
 
 const BOARD = [
@@ -114,7 +114,6 @@ const blockStrategy = (board) => {
   return false;
 };
 
-// String -> Array -> Number
 const playStrategy = (strategy, board) => {
   const candidates = indexsOf(board, Empty);
   const length = candidates.length;
@@ -237,7 +236,7 @@ const App = () => {
           </select>
         </p>
         <p>History</p>
-        <div>
+        <div className="terminal">
           <ol reversed>
             <HistoryList history={history} />
           </ol>
@@ -252,27 +251,27 @@ export default App;
 const HistoryList = ({ history }) =>
   history.map(({ winner, strategy, timestamp, winPercentage }, index) => (
     <li key={index + winner}>
-      {FLASH[winner]} strategy: {strategy} {timestamp.toLocaleTimeString()} win
-      percentage: {winPercentage}%
+      {timestamp.toLocaleTimeString()} • {FLASH[winner]} • {strategy} • win
+      percentage: {winPercentage}%``
     </li>
   ));
 
-const DrawModal = (props) => (
+const DrawModal = ({ onClick }) => (
   <div className="draw-modal">
     <h2>{FLASH["Draw"]}</h2>
-    <button {...props}>Play Again</button>
+    <button {...{ onClick }}>Play Again</button>
   </div>
 );
-const LoseModal = (props) => (
+const LoseModal = ({ onClick }) => (
   <div className="lose-modal">
     <h2>{FLASH[O]}</h2>
-    <button {...props}>Play Again</button>
+    <button {...{ onClick }}>Play Again</button>
   </div>
 );
 
-const WinModal = (props) => (
+const WinModal = ({ onClick }) => (
   <div className="win-modal">
     <h2>{FLASH[X]}</h2>
-    <button {...props}>Play Again</button>
+    <button {...{ onClick }}>Play Again</button>
   </div>
 );
