@@ -252,7 +252,7 @@ const HistoryList = ({ history }) =>
   history.map(({ winner, strategy, timestamp, winPercentage }, index) => (
     <li key={index + winner}>
       {timestamp.toLocaleTimeString()} • {FLASH[winner]} • {strategy} • win
-      percentage: {winPercentage}%``
+      percentage: {winPercentage}%
     </li>
   ));
 
