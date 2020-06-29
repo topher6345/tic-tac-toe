@@ -184,6 +184,7 @@ const App = () => {
   const updateStrategy = (e) => setStrategy(e.target.value);
 
   const resetGame = () => {
+    onNewGameSound.play();
     setStrategy(strategy);
     setBoard(Array.from(initalBoard));
     setOver(false);
