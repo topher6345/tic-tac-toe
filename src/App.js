@@ -10,6 +10,18 @@ const X = "❌";
 const O = "⭕️";
 const Empty = "";
 
+const Trophy = ({ className }) => (
+  <span {...{ className }} role="img" aria-label="Trophy">
+    🏆
+  </span>
+);
+
+const CryingFace = ({ className }) => (
+  <span {...{ className }} role="img" aria-label="Crying Face">
+    😭
+  </span>
+);
+// used by history and view
 const FLASH = {
   [X]: (
     <>
@@ -143,11 +155,9 @@ const playStrategy = (strategy, board) => {
     return candidates[length - 1];
   } else if (strategy === "block") {
     const index = blockStrategy(board);
-    if (index === false) {
-      return candidates[Math.floor(Math.random() * length)];
-    } else {
-      return index;
-    }
+    return index === false
+      ? candidates[Math.floor(Math.random() * length)]
+      : index;
   }
 };
 
@@ -176,13 +186,13 @@ const winPercentage = (history) =>
 
 const App = () => {
   const [board, setBoard] = useState(Array.from(initalBoard));
-  const [over, setOver] = useState(false);
+  const [gameOver, setOver] = useState(false);
   const [strategy, setStrategy] = useState("block");
   const [history, setHistory] = useState([]);
   const winner = detectWinner(board);
 
   const onPlay = (index) => () => {
-    if (over) return;
+    if (gameOver) return;
     onPlaySound.play();
     const newBoard = Array.from(board);
     newBoard[index] = X;
@@ -343,15 +353,3 @@ class WinModal extends React.Component {
     );
   }
 }
-
-const Trophy = ({ className }) => (
-  <span {...{ className }} role="img" aria-label="Trophy">
-    🏆
-  </span>
-);
-
-const CryingFace = ({ className }) => (
-  <span {...{ className }} role="img" aria-label="Crying Face">
-    😭
-  </span>
-);
