@@ -353,3 +353,24 @@ class WinModal extends React.Component {
     );
   }
 }
+
+class GamOverModal extends React.Component {
+  componentDidMount() {
+    onWinSound.play();
+  }
+
+  render() {
+    return (
+      <div className={this.props.classNam}>
+        <h2>{FLASH[this.props.winner]}</h2>
+        <button
+          {...{
+            onClick: this.props.onClick,
+          }}
+        >
+          Play Again
+        </button>
+      </div>
+    );
+  }
+}
