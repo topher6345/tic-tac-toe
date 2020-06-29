@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "./App.css";
 
 const onPlaySound = document.getElementById("onPlaySound");
+const onLoseSound = document.getElementById("onLoseSound");
+const onWinSound = document.getElementById("onWinSound");
 const X = "❌";
 const O = "⭕️";
 const Empty = "";
@@ -171,6 +173,7 @@ const App = () => {
     const newBoard = Array.from(board);
     newBoard[index] = X;
     const winner = detectWinner(newBoard);
+
     setOver(winner);
     if (!winner) newBoard[playStrategy(strategy, newBoard)] = O;
     setBoard(newBoard);
@@ -264,16 +267,50 @@ const DrawModal = ({ onClick }) => (
     <button {...{ onClick }}>Play Again</button>
   </div>
 );
-const LoseModal = ({ onClick }) => (
-  <div className="lose-modal">
-    <h2>{FLASH[O]}</h2>
-    <button {...{ onClick }}>Play Again</button>
-  </div>
-);
+class LoseModal extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  componentDidMount() {
+    onLoseSound.play();
+  }
 
-const WinModal = ({ onClick }) => (
-  <div className="win-modal">
-    <h2>{FLASH[X]}</h2>
-    <button {...{ onClick }}>Play Again</button>
-  </div>
-);
+  render() {
+    return (
+      <div className="lose-modal">
+        <h2>{FLASH[O]}</h2>
+        <button
+          {...{
+            onClick: this.props.onClick,
+          }}
+        >
+          Play Again
+        </button>
+      </div>
+    );
+  }
+}
+
+class WinModal extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  componentDidMount() {
+    onWinSound.play();
+  }
+
+  render() {
+    return (
+      <div className="win-modal">
+        <h2>{FLASH[X]}</h2>
+        <button
+          {...{
+            onClick: this.props.onClick,
+          }}
+        >
+          Play Again
+        </button>
+      </div>
+    );
+  }
+}
