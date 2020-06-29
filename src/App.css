@@ -26,6 +26,7 @@ td {
 td:hover {
   cursor: pointer;
   background-color: darkgray;
+  transition: 0.5s;
 }
 
 div > div {
@@ -64,6 +65,12 @@ div > div {
   to {
     opacity: 1;
   }
+}
+
+.win-modal,
+.lose-modal,
+.draw-modal {
+  z-index: 1;
 }
 .win-modal {
   background-color: #75ecafc2;
@@ -115,4 +122,42 @@ select {
 
 li {
   text-align: left;
+}
+
+.fade-in {
+  animation: fadeIn ease 1s;
+  -webkit-animation: fadeIn ease 1s;
+  -moz-animation: fadeIn ease 1s;
+  -o-animation: fadeIn ease 1s;
+  -ms-animation: fadeIn ease 1s;
+  z-index: 0;
+}
+
+.spin {
+  display: inline-block;
+  animation: spinAnimation ease 2s;
+  -webkit-animation: spinAnimation ease 2s;
+  -moz-animation: spinAnimation ease 2s;
+  -o-animation: spinAnimation ease 2s;
+  -ms-animation: spinAnimation ease 2s;
+}
+
+@keyframes spinAnimation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: rotateY(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateY(180deg);
+  }
 }

@@ -11,7 +11,12 @@ const O = "⭕️";
 const Empty = "";
 
 const FLASH = {
-  [X]: "🏆You Won!🏆",
+  [X]: (
+    <>
+      <span className="spin">🏆</span>You Won!
+      <span className="spin">🏆</span>"
+    </>
+  ),
   [O]: "😭You Lost!😭",
   Draw: "🤷‍♀️   Draw   🤷‍♀️",
 };
@@ -207,7 +212,12 @@ const App = () => {
   const makeTd = (index) => {
     const message = board[index];
     if (message === X) return <td key={index}>{X}</td>;
-    if (message === O) return <td key={index}>{O}</td>;
+    if (message === O)
+      return (
+        <td className="fade-in" key={index}>
+          {O}
+        </td>
+      );
 
     return (
       <td onClick={onPlay(index)} key={index}>
