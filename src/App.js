@@ -4,6 +4,7 @@ import "./App.css";
 const onPlaySound = document.getElementById("onPlaySound");
 const onLoseSound = document.getElementById("onLoseSound");
 const onWinSound = document.getElementById("onWinSound");
+const onDrawSound = document.getElementById("onDrawSound");
 const X = "❌";
 const O = "⭕️";
 const Empty = "";
@@ -261,12 +262,29 @@ const HistoryList = ({ history }) =>
     </li>
   ));
 
-const DrawModal = ({ onClick }) => (
-  <div className="draw-modal">
-    <h2>{FLASH["Draw"]}</h2>
-    <button {...{ onClick }}>Play Again</button>
-  </div>
-);
+class DrawModal extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  componentDidMount() {
+    onDrawSound.play();
+  }
+
+  render() {
+    return (
+      <div className="draw-modal">
+        <h2>{FLASH["Draw"]}</h2>
+        <button
+          {...{
+            onClick: this.props.onClick,
+          }}
+        >
+          Play Again
+        </button>
+      </div>
+    );
+  }
+}
 class LoseModal extends React.Component {
   constructor(props) {
     super(props);
