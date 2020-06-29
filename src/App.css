@@ -133,16 +133,25 @@ li {
   z-index: 0;
 }
 
-.spin {
+.spin-right {
   display: inline-block;
-  animation: spinAnimation ease 2s;
-  -webkit-animation: spinAnimation ease 2s;
-  -moz-animation: spinAnimation ease 2s;
-  -o-animation: spinAnimation ease 2s;
-  -ms-animation: spinAnimation ease 2s;
+  animation: spin-left linear 2s infinite;
+  -webkit-animation: spin-left linear 2s infinite;
+  -moz-animation: spin-left linear 2s infinite;
+  -o-animation: spin-left linear 2s infinite;
+  -ms-animation: spin-left linear 2s infinite;
 }
 
-@keyframes spinAnimation {
+.spin-left {
+  display: inline-block;
+  animation: spin-left linear 2s infinite reverse;
+  -webkit-animation: spin-left linear 2s infinite reverse;
+  -moz-animation: spin-left linear 2s infinite reverse;
+  -o-animation: spin-left linear 2s infinite reverse;
+  -ms-animation: spin-left linear 2s infinite reverse;
+}
+
+@keyframes spin-left {
   0% {
     transform: rotate(0deg);
   }

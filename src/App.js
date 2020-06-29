@@ -13,11 +13,18 @@ const Empty = "";
 const FLASH = {
   [X]: (
     <>
-      <span className="spin">🏆</span>You Won!
-      <span className="spin">🏆</span>"
+      <Trophy className="spin-left" />
+      You Won!
+      <Trophy className="spin-right" />
     </>
   ),
-  [O]: "😭You Lost!😭",
+  [O]: (
+    <>
+      <CryingFace className="spin-left" />
+      You Lost!
+      <CryingFace className="spin-right" />
+    </>
+  ),
   Draw: "🤷‍♀️   Draw   🤷‍♀️",
 };
 
@@ -276,9 +283,6 @@ const HistoryList = ({ history }) =>
   ));
 
 class DrawModal extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   componentDidMount() {
     onDrawSound.play();
   }
@@ -299,9 +303,6 @@ class DrawModal extends React.Component {
   }
 }
 class LoseModal extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   componentDidMount() {
     onLoseSound.play();
   }
@@ -323,9 +324,6 @@ class LoseModal extends React.Component {
 }
 
 class WinModal extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   componentDidMount() {
     onWinSound.play();
   }
@@ -345,3 +343,15 @@ class WinModal extends React.Component {
     );
   }
 }
+
+const Trophy = ({ className }) => (
+  <span {...{ className }} role="img" aria-label="Trophy">
+    🏆
+  </span>
+);
+
+const CryingFace = ({ className }) => (
+  <span {...{ className }} role="img" aria-label="Crying Face">
+    😭
+  </span>
+);
