@@ -5,6 +5,7 @@ const onPlaySound = document.getElementById("onPlaySound");
 const onLoseSound = document.getElementById("onLoseSound");
 const onWinSound = document.getElementById("onWinSound");
 const onDrawSound = document.getElementById("onDrawSound");
+const onNewGameSound = document.getElementById("onNewGameSound");
 const X = "❌";
 const O = "⭕️";
 const Empty = "";
@@ -189,6 +190,7 @@ const App = () => {
   };
 
   const newGame = () => {
+    onNewGameSound.play();
     setHistory((oldHistory) => [
       {
         winner,
