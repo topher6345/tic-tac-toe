@@ -6,6 +6,7 @@ const onLoseSound = document.getElementById("onLoseSound");
 const onWinSound = document.getElementById("onWinSound");
 const onDrawSound = document.getElementById("onDrawSound");
 const onNewGameSound = document.getElementById("onNewGameSound");
+const onHoverSound = document.getElementById("onHoverSound");
 const X = "❌";
 const O = "⭕️";
 const Empty = "";
@@ -237,7 +238,11 @@ const App = () => {
       );
 
     return (
-      <td onClick={onPlay(index)} key={index}>
+      <td
+        onClick={onPlay(index)}
+        onMouseEnter={() => onHoverSound.play()}
+        key={index}
+      >
         {" "}
         &nbsp;{" "}
       </td>
@@ -258,7 +263,9 @@ const App = () => {
       </table>
       <div>
         <p>
-          <button onClick={resetGame}>Reset</button>
+          <button onMouseEnter={() => onHoverSound.play()} onClick={resetGame}>
+            New Game
+          </button>
         </p>
         <p>
           <label htmlFor="strategy">Strategy</label>

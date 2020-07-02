@@ -21,11 +21,12 @@ td {
   min-width: 1em;
   min-height: 1.2em;
   font-size: 3em;
+  animation: fadein 2s;
 }
 
 td:hover {
   cursor: pointer;
-  background-color: darkgray;
+  background-color: #202020;
   transition: 0.5s;
 }
 
@@ -55,7 +56,7 @@ div > div {
   height: 100%;
   width: 100%;
   position: absolute;
-  animation: fadein 1s;
+  animation: fadein 1.5s;
 }
 
 @keyframes fadein {
@@ -122,6 +123,10 @@ select {
 
 li {
   text-align: left;
+}
+
+li:hover {
+  background-color: lightgray;
 }
 
 .fade-in {
