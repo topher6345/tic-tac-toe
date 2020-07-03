@@ -174,6 +174,13 @@ const initalBoard = [
   Empty,
 ];
 
+const arrayEql = (a, b) => {
+  for (let i = 0; i < a.length; i++) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+};
+
 const winPercentage = (history) =>
   (
     (history.reduce(
@@ -207,9 +214,10 @@ const App = () => {
   const updateStrategy = (e) => setStrategy(e.target.value);
 
   const resetGame = () => {
-    onNewGameSound.play();
+    const newBoard = Array.from(initalBoard);
+    if (!arrayEql(board, newBoard)) onNewGameSound.play();
     setStrategy(strategy);
-    setBoard(Array.from(initalBoard));
+    setBoard(newBoard);
     setOver(false);
   };
 
