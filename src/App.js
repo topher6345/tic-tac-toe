@@ -152,17 +152,27 @@ const playStrategy = (strategy, board) => {
   const candidates = indexsOf(board, Empty);
   const length = candidates.length;
 
+  const random = () => candidates[Math.floor(Math.random() * length)];
+
+  const hard = () => {
+    const index = blockStrategy(board);
+    return index === false
+      ? candidates[Math.floor(Math.random() * length)]
+      : index;
+  };
+
   if (strategy === "random") {
-    return candidates[Math.floor(Math.random() * length)];
+    if (Math.floor(Math.random() * 100) > 67) {
+      return hard();
+    } else {
+      return random();
+    }
   } else if (strategy === "first") {
     return candidates[0];
   } else if (strategy === "last") {
     return candidates[length - 1];
   } else if (strategy === "hard") {
-    const index = blockStrategy(board);
-    return index === false
-      ? candidates[Math.floor(Math.random() * length)]
-      : index;
+    return hard();
   }
 };
 
