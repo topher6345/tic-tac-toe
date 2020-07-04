@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 const selId = (id) => document.getElementById(id);
 
@@ -26,6 +26,12 @@ const CryingFace = ({ className }) => (
     😭
   </span>
 );
+
+const Shrug = ({ className }) => (
+  <span {...{ className }} role="img" aria-label="Shrug">
+    🤷‍♀️
+  </span>
+);
 // used by history and view
 const FLASH = {
   [X]: (
@@ -42,7 +48,11 @@ const FLASH = {
       <CryingFace className="spin-right" />
     </>
   ),
-  Draw: "🤷‍♀️   Draw   🤷‍♀️",
+  Draw: (
+    <>
+      <Shrug /> Draw <Shrug />
+    </>
+  ),
 };
 
 const BOARD = [
@@ -82,12 +92,6 @@ const detectWinner = (array) => {
 
   return false;
 };
-
-// [
-//   [0, 1, 2],
-//   [3, 4, 5],
-//   [6, 7, 8],
-// ]
 
 const blockStrategy = (board) => {
   if (count(board, X) === 1 && board[4] === Empty) return 4;
@@ -335,64 +339,41 @@ const HistoryList = ({ history }) =>
     </li>
   ));
 
-class DrawModal extends React.Component {
-  componentDidMount() {
+const DrawModal = ({ onClick }) => {
+  useEffect(() => {
     onDrawSound.play();
-  }
+  });
 
-  render() {
-    return (
-      <div className="draw-modal">
-        <h2>{FLASH["Draw"]}</h2>
-        <button
-          {...{
-            onClick: this.props.onClick,
-          }}
-        >
-          Play Again
-        </button>
-      </div>
-    );
-  }
-}
-class LoseModal extends React.Component {
-  componentDidMount() {
+  return (
+    <div className="draw-modal">
+      <h2>{FLASH["Draw"]}</h2>
+      <button {...{ onClick }}>Play Again</button>
+    </div>
+  );
+};
+
+const LoseModal = ({ onClick }) => {
+  useEffect(() => {
     onLoseSound.play();
-  }
+  });
 
-  render() {
-    return (
-      <div className="lose-modal">
-        <h2>{FLASH[O]}</h2>
-        <button
-          {...{
-            onClick: this.props.onClick,
-          }}
-        >
-          Play Again
-        </button>
-      </div>
-    );
-  }
-}
+  return (
+    <div className="lose-modal">
+      <h2>{FLASH[O]}</h2>
+      <button {...{ onClick }}>Play Again</button>
+    </div>
+  );
+};
 
-class WinModal extends React.Component {
-  componentDidMount() {
+const WinModal = ({ onClick }) => {
+  useEffect(() => {
     onWinSound.play();
-  }
+  });
 
-  render() {
-    return (
-      <div className="win-modal">
-        <h2>{FLASH[X]}</h2>
-        <button
-          {...{
-            onClick: this.props.onClick,
-          }}
-        >
-          Play Again
-        </button>
-      </div>
-    );
-  }
-}
+  return (
+    <div className="win-modal">
+      <h2>{FLASH[X]}</h2>
+      <button {...{ onClick }}>Play Again</button>
+    </div>
+  );
+};
