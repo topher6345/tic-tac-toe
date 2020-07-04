@@ -158,7 +158,7 @@ const playStrategy = (strategy, board) => {
     return candidates[0];
   } else if (strategy === "last") {
     return candidates[length - 1];
-  } else if (strategy === "block") {
+  } else if (strategy === "hard") {
     const index = blockStrategy(board);
     return index === false
       ? candidates[Math.floor(Math.random() * length)]
@@ -199,7 +199,7 @@ const winPercentage = (history) =>
 const App = () => {
   const [board, setBoard] = useState(Array.from(initalBoard));
   const [gameOver, setOver] = useState(false);
-  const [strategy, setStrategy] = useState("block");
+  const [strategy, setStrategy] = useState("hard");
   const [history, setHistory] = useState(localStorageGet("history") || []);
   const winner = detectWinner(board);
 
@@ -265,6 +265,17 @@ const App = () => {
     );
   };
 
+  const clearHistory = () => {
+    if (
+      !window.confirm(
+        "Are you sure? This will delete your game history permanently."
+      )
+    )
+      return;
+    setHistory([]);
+    localStorageSet("history", []);
+  };
+
   const squares = () =>
     BOARD.map((row, index) => <tr key={index}>{row.map(makeSquare)}</tr>);
 
@@ -287,20 +298,23 @@ const App = () => {
         </p>
         <div className="paneled">
           <p>
-            <label htmlFor="strategy">Strategy</label>
+            <label htmlFor="strategy">Difficulty</label>
           </p>
         </div>
         <p>
           <select name="strategy" onChange={updateStrategy}>
-            <option value="block">Block</option>
-            <option value="random">Random</option>
-            <option value="first">First</option>
-            <option value="last">Last</option>
+            <option value="hard">HARD</option>
+            <option value="random">MEDIUM</option>
+            <option value="first">EASY #1</option>
+            <option value="last">EASY #2</option>
           </select>
         </p>
         <div className="paneled">
           <p>History</p>
         </div>
+        <button onClick={clearHistory} className="clearButton">
+          Clear
+        </button>
         <div className="terminal">
           <ol reversed>
             <HistoryList history={history} />
