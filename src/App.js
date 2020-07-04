@@ -267,11 +267,13 @@ const App = () => {
 
   const clearHistory = () => {
     if (
+      history.length > 0 &&
       !window.confirm(
         "Are you sure? This will delete your game history permanently."
       )
     )
       return;
+
     setHistory([]);
     localStorageSet("history", []);
   };
