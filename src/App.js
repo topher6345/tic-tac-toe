@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import "./App.css";
-
-const onPlaySound = document.getElementById("onPlaySound");
-const onLoseSound = document.getElementById("onLoseSound");
-const onWinSound = document.getElementById("onWinSound");
-const onDrawSound = document.getElementById("onDrawSound");
-const onNewGameSound = document.getElementById("onNewGameSound");
-const onHoverSound = document.getElementById("onHoverSound");
+const selId = (id) => document.getElementById(id);
+const onPlaySound = selId("onPlaySound");
+const onLoseSound = selId("onLoseSound");
+const onWinSound = selId("onWinSound");
+const onDrawSound = selId("onDrawSound");
+const onNewGameSound = selId("onNewGameSound");
+const onHoverSound = selId("onHoverSound");
 const X = "❌";
 const O = "⭕️";
 const Empty = "";
@@ -265,7 +265,9 @@ const App = () => {
       {winner === X && <WinModal onClick={newGame} />}
       {winner === O && <LoseModal onClick={newGame} />}
       {winner === "Draw" && <DrawModal onClick={newGame} />}
-      <h1>Tic • Tac • Toe</h1>
+      <div className="h1-container">
+        <h1>Tic • Tac • Toe</h1>
+      </div>
       <table>
         <tbody>{rows()}</tbody>
       </table>

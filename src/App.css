@@ -22,7 +22,7 @@ td {
   min-height: 64px;
   font-size: 3em;
   animation: fadein 2s;
-  box-shadow: 3px 2px 9px gray;
+  box-shadow: 0px 0px 5apx gray;
   display: inline-block;
   border: 1px solid #575757;
 }
@@ -134,6 +134,8 @@ li {
 
 li:hover {
   background-color: lightgray;
+  cursor: default;
+  color: black;
 }
 
 .fade-in {
