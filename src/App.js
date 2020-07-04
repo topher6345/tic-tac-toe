@@ -235,7 +235,7 @@ const App = () => {
     resetGame();
   };
 
-  const makeTd = (index) => {
+  const makeSquare = (index) => {
     const message = board[index];
     if (message === X) return <td key={index}>{X}</td>;
     if (message === O)
@@ -257,19 +257,19 @@ const App = () => {
     );
   };
 
-  const rows = () =>
-    BOARD.map((row, index) => <tr key={index}>{row.map(makeTd)}</tr>);
+  const squares = () =>
+    BOARD.map((row, index) => <tr key={index}>{row.map(makeSquare)}</tr>);
 
   return (
     <>
       {winner === X && <WinModal onClick={newGame} />}
       {winner === O && <LoseModal onClick={newGame} />}
       {winner === "Draw" && <DrawModal onClick={newGame} />}
-      <div className="h1-container">
+      <div className="paneled">
         <h1>Tic • Tac • Toe</h1>
       </div>
       <table>
-        <tbody>{rows()}</tbody>
+        <tbody>{squares()}</tbody>
       </table>
       <div>
         <p>
@@ -277,18 +277,22 @@ const App = () => {
             New Game
           </button>
         </p>
-        <p>
-          <label htmlFor="strategy">Strategy</label>
-        </p>
+        <div className="paneled">
+          <p>
+            <label htmlFor="strategy">Strategy</label>
+          </p>
+        </div>
         <p>
           <select name="strategy" onChange={updateStrategy}>
             <option value="block">Block</option>
-            <option value="random">RANDOM</option>
-            <option value="first">FIRST</option>
-            <option value="last">LAST</option>
+            <option value="random">Random</option>
+            <option value="first">First</option>
+            <option value="last">Last</option>
           </select>
         </p>
-        <p>History</p>
+        <div className="paneled">
+          <p>History</p>
+        </div>
         <div className="terminal">
           <ol reversed>
             <HistoryList history={history} />
@@ -359,27 +363,6 @@ class WinModal extends React.Component {
     return (
       <div className="win-modal">
         <h2>{FLASH[X]}</h2>
-        <button
-          {...{
-            onClick: this.props.onClick,
-          }}
-        >
-          Play Again
-        </button>
-      </div>
-    );
-  }
-}
-
-class GamOverModal extends React.Component {
-  componentDidMount() {
-    onWinSound.play();
-  }
-
-  render() {
-    return (
-      <div className={this.props.classNam}>
-        <h2>{FLASH[this.props.winner]}</h2>
         <button
           {...{
             onClick: this.props.onClick,

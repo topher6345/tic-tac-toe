@@ -10,6 +10,13 @@ table {
   margin: 0 auto;
 }
 
+.paneled {
+  background-color: #ffffff2e;
+  width: max-content;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
 h1 {
   text-align: center;
   text-transform: uppercase;
