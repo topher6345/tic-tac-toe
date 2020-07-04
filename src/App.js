@@ -162,11 +162,7 @@ const playStrategy = (strategy, board) => {
   };
 
   if (strategy === "random") {
-    if (Math.floor(Math.random() * 100) > 67) {
-      return hard();
-    } else {
-      return random();
-    }
+    return Math.floor(Math.random() * 100) > 67 ? hard() : random();
   } else if (strategy === "first") {
     return candidates[0];
   } else if (strategy === "last") {
@@ -303,27 +299,19 @@ const App = () => {
         <tbody>{squares()}</tbody>
       </table>
       <div>
-        <p>
-          <button onMouseEnter={() => onHoverSound.play()} onClick={resetGame}>
-            New Game
-          </button>
-        </p>
+        <button onMouseEnter={() => onHoverSound.play()} onClick={resetGame}>
+          New Game
+        </button>
         <div className="paneled">
-          <p>
-            <label htmlFor="strategy">Difficulty</label>
-          </p>
+          <label htmlFor="strategy">Difficulty</label>
         </div>
-        <p>
-          <select name="strategy" onChange={updateStrategy}>
-            <option value="hard">HARD</option>
-            <option value="random">MEDIUM</option>
-            <option value="first">EASY #1</option>
-            <option value="last">EASY #2</option>
-          </select>
-        </p>
-        <div className="paneled">
-          <p>History</p>
-        </div>
+        <select name="strategy" onChange={updateStrategy}>
+          <option value="hard">HARD</option>
+          <option value="random">MEDIUM</option>
+          <option value="first">EASY #1</option>
+          <option value="last">EASY #2</option>
+        </select>
+        <div className="paneled">History</div>
         <button onClick={clearHistory} className="clearButton">
           Clear
         </button>
