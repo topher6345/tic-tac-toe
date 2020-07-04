@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import "./App.css";
 const selId = (id) => document.getElementById(id);
+
+const localStorageGet = (key) => JSON.parse(window.localStorage.getItem(key));
+const localStorageSet = (key, value) =>
+  window.localStorage.setItem(key, JSON.stringify(value));
 const onPlaySound = selId("onPlaySound");
 const onLoseSound = selId("onLoseSound");
 const onWinSound = selId("onWinSound");
@@ -196,7 +200,7 @@ const App = () => {
   const [board, setBoard] = useState(Array.from(initalBoard));
   const [gameOver, setOver] = useState(false);
   const [strategy, setStrategy] = useState("block");
-  const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState(localStorageGet("history") || []);
   const winner = detectWinner(board);
 
   const onPlay = (index) => () => {
@@ -223,15 +227,19 @@ const App = () => {
 
   const newGame = () => {
     onNewGameSound.play();
-    setHistory((oldHistory) => [
-      {
-        winner,
-        strategy,
-        timestamp: new Date(Date.now()),
-        winPercentage: winPercentage([{ winner }, ...oldHistory]),
-      },
-      ...oldHistory,
-    ]);
+    setHistory((oldHistory) => {
+      const gameHistory = [
+        {
+          winner,
+          strategy,
+          timestamp: new Date(Date.now()).toLocaleTimeString(),
+          winPercentage: winPercentage([{ winner }, ...oldHistory]),
+        },
+        ...oldHistory,
+      ];
+      localStorageSet("history", gameHistory);
+      return gameHistory;
+    });
     resetGame();
   };
 
@@ -308,8 +316,8 @@ export default App;
 const HistoryList = ({ history }) =>
   history.map(({ winner, strategy, timestamp, winPercentage }, index) => (
     <li key={index + winner}>
-      {timestamp.toLocaleTimeString()} • {FLASH[winner]} • {strategy} • win
-      percentage: {winPercentage}%
+      {timestamp} • {FLASH[winner]} • {strategy} • win percentage:{" "}
+      {winPercentage}%
     </li>
   ));
 
